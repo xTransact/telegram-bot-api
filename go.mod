@@ -1,3 +1,3 @@
-module github.com/xTransact/telegram-bot-api-bot-api
+module github.com/xTransact/telegram-bot-api
 
 go 1.16
