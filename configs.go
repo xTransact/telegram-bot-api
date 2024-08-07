@@ -417,7 +417,6 @@ func (config PhotoConfig) params() (Params, error) {
 		return params, err
 	}
 
-	params.AddNonEmpty("photo", config.File.SendData())
 	params.AddNonEmpty("caption", config.Caption)
 	params.AddNonEmpty("parse_mode", config.ParseMode)
 	err = params.AddInterface("caption_entities", config.CaptionEntities)
