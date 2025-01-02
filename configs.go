@@ -2413,6 +2413,102 @@ func (config GetMyDefaultAdministratorRightsConfig) params() (Params, error) {
 	return params, nil
 }
 
+type CreateInvoiceLinkConfig struct {
+	ChatConfig
+	BusinessConnectionID      string         `json:"business_connection_id,omitempty"`
+	Title                     string         `json:"title"`
+	Description               string         `json:"description"`
+	Payload                   string         `json:"payload"`
+	ProviderToken             string         `json:"provider_token,omitempty"`
+	Currency                  string         `json:"currency"`
+	Prices                    []LabeledPrice `json:"prices"`
+	SubscriptionPeriod        int            `json:"subscription_period,omitempty"`
+	MaxTipAmount              int            `json:"max_tip_amount,omitempty"`
+	ProviderData              string         `json:"provider_data,omitempty"`
+	PhotoURL                  string         `json:"photo_url,omitempty"`
+	PhotoSize                 int            `json:"photo_size,omitempty"`
+	PhotoWidth                int            `json:"photo_width,omitempty"`
+	PhotoHeight               int            `json:"photo_height,omitempty"`
+	NeedName                  bool           `json:"need_name,omitempty"`
+	NeedPhoneNumber           bool           `json:"need_phone_number,omitempty"`
+	NeedEmail                 bool           `json:"need_email,omitempty"`
+	NeedShippingAddress       bool           `json:"need_shipping_address,omitempty"`
+	SendPhoneNumberToProvider bool           `json:"send_phone_number_to_provider,omitempty"`
+	SendEmailToProvider       bool           `json:"send_email_to_provider,omitempty"`
+	IsFlexible                bool           `json:"is_flexible,omitempty"`
+}
+
+func (c *CreateInvoiceLinkConfig) params() (Params, error) {
+	params := make(Params)
+
+	params["title"] = c.Title
+	params["description"] = c.Description
+	params["payload"] = c.Payload
+	params["provider_token"] = c.ProviderToken
+	params["currency"] = c.Currency
+	if err := params.AddInterface("prices", c.Prices); err != nil {
+		return params, err
+	}
+	params.AddNonZero("subscription_period", c.SubscriptionPeriod)
+	params.AddNonZero("max_tip_amount", c.MaxTipAmount)
+	params.AddNonEmpty("provider_data", c.ProviderData)
+	params.AddNonEmpty("photo_url", c.PhotoURL)
+	params.AddNonZero("photo_size", c.PhotoSize)
+	params.AddNonZero("photo_width", c.PhotoWidth)
+	params.AddNonZero("photo_height", c.PhotoHeight)
+	params.AddBool("need_name", c.NeedName)
+	params.AddBool("need_phone_number", c.NeedPhoneNumber)
+	params.AddBool("need_email", c.NeedEmail)
+	params.AddBool("need_shipping_address", c.NeedShippingAddress)
+	params.AddBool("send_phone_number_to_provider", c.SendPhoneNumberToProvider)
+	params.AddBool("send_email_to_provider", c.SendEmailToProvider)
+	params.AddBool("is_flexible", c.IsFlexible)
+
+	return params, nil
+}
+
+func (CreateInvoiceLinkConfig) method() string {
+	return "createInvoiceLink"
+}
+
+type RefundStarPaymentConfig struct {
+	UserID                  int64  `json:"user_id"`
+	TelegramPaymentChargeID string `json:"telegram_payment_charge_id"`
+}
+
+func (c *RefundStarPaymentConfig) params() (Params, error) {
+	params := make(Params)
+
+	params.AddNonZero64("user_id", c.UserID)
+	params.AddNonEmpty("telegram_payment_charge_id", c.TelegramPaymentChargeID)
+
+	return params, nil
+}
+
+func (RefundStarPaymentConfig) method() string {
+	return "refundStarPayment"
+}
+
+type AnswerPreCheckoutQueryConfig struct {
+	PreCheckoutQueryID string `json:"pre_checkout_query_id"`
+	OK                 bool   `json:"ok"`
+	ErrorMessage       string `json:"error_message,omitempty"`
+}
+
+func (c *AnswerPreCheckoutQueryConfig) params() (Params, error) {
+	params := make(Params)
+
+	params["pre_checkout_query_id"] = c.PreCheckoutQueryID
+	params.AddBool("ok", c.OK)
+	params.AddNonEmpty("error_message", c.ErrorMessage)
+
+	return params, nil
+}
+
+func (AnswerPreCheckoutQueryConfig) method() string {
+	return "answerPreCheckoutQuery"
+}
+
 // prepareInputMediaParam evaluates a single InputMedia and determines if it
 // needs to be modified for a successful upload. If it returns nil, then the
 // value does not need to be included in the params. Otherwise, it will return

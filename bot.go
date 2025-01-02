@@ -3,6 +3,7 @@
 package tgbotapi
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -290,6 +291,24 @@ func (bot *BotAPI) GetMe() (User, error) {
 	err = json.Unmarshal(resp.Result, &user)
 
 	return user, err
+}
+
+// CreateInvoiceLink https://core.telegram.org/bots/api#createinvoicelink
+func (bot *BotAPI) CreateInvoiceLink(ctx context.Context, c *CreateInvoiceLinkConfig) (string, error) {
+	resp, err := bot.Request(c)
+	if err != nil {
+		return "", err
+	}
+	return string(resp.Result), nil
+}
+
+// RefundStarPayment https://core.telegram.org/bots/api#refundstarpayment
+func (bot *BotAPI) RefundStarPayment(ctx context.Context, c *RefundStarPaymentConfig) (bool, error) {
+	resp, err := bot.Request(c)
+	if err != nil {
+		return false, err
+	}
+	return string(resp.Result) == "True", nil
 }
 
 // IsMessageToMe returns true if message directed to this bot.
